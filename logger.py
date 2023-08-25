@@ -1,7 +1,3 @@
-# Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
-#
-# This source code is licensed under the MIT license found in the
-# LICENSE file in the root directory of this source tree.
 import csv
 import datetime
 from collections import defaultdict
@@ -39,9 +35,9 @@ class AverageMeter(object):
 
 class MetersGroup(object):
     def __init__(self, csv_file_name, formating):
-        self._csv_file_name = csv_file_name
-        self._formating = formating
-        self._meters = defaultdict(AverageMeter)
+        self._csv_file_name = csv_file_name  # full file name with directory
+        self._formating = formating  # e.g. COMMON_TRAIN_FORMAT
+        self._meters = defaultdict(AverageMeter)  # defaultdict: dict subclass that calls a factory function to supply missing values
         self._csv_file = None
         self._csv_writer = None
 
@@ -124,11 +120,11 @@ class MetersGroup(object):
 
 class Logger(object):
     def __init__(self, log_dir, use_tb):
-        self._log_dir = log_dir
+        self._log_dir = log_dir  # current directory
         self._train_mg = MetersGroup(log_dir / 'train.csv',
-                                     formating=COMMON_TRAIN_FORMAT)
+                                     formating=COMMON_TRAIN_FORMAT)  # COMMON_TRAIN_FORMAT: array with tuple components
         self._eval_mg = MetersGroup(log_dir / 'eval.csv',
-                                    formating=COMMON_EVAL_FORMAT)
+                                    formating=COMMON_EVAL_FORMAT)  # COMMON_EVAL_FORMAT: array with tuple components
         if use_tb:
             self._sw = SummaryWriter(str(log_dir / 'tb'))
         else:

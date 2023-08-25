@@ -42,7 +42,7 @@ class Workspace:
         self._global_episode = 0
 
     def setup(self):
-        # create logger
+        # create Logger in logger.py
         self.logger = Logger(self.work_dir, use_tb=self.cfg.use_tb)
         # create envs
         self.train_env = dmc.make(self.cfg.task_name, self.cfg.frame_stack,
