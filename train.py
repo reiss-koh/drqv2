@@ -43,8 +43,13 @@ class Workspace:
 
     def setup(self):
         # create Logger in logger.py
-        self.logger = Logger(self.work_dir, use_tb=self.cfg.use_tb)
+        self.logger = Logger(self.work_dir, use_tb=self.cfg.use_tb)  # self.work_dir: current directory, self.cfg.use_tb: boolean
         # create envs
+        '''
+        e.g. task_name: quadruped_walk @cfgs/task/quadruped_walk.yaml
+        e.g. frame_stack: 3 {TODO ours should be 1?}
+        e.g. action_repeat: 2
+        '''
         self.train_env = dmc.make(self.cfg.task_name, self.cfg.frame_stack,
                                   self.cfg.action_repeat, self.cfg.seed)
         self.eval_env = dmc.make(self.cfg.task_name, self.cfg.frame_stack,
