@@ -17,7 +17,7 @@ from logger import Logger
 from replay_buffer import ReplayBufferStorage, make_replay_loader
 from video import TrainVideoRecorder, VideoRecorder
 
-torch.backends.cudnn.benchmark = True
+torch.backends.cudnn.benchmark = True  # flag allows you to enable the inbuilt cudnn auto-tuner to find the best algorithm to use for your hardware
 
 def make_agent(obs_spec, action_spec, cfg):
     cfg.obs_shape = obs_spec.shape
@@ -197,16 +197,16 @@ class Workspace:
             self.__dict__[k] = v
 
 
-@hydra.main(config_path='cfgs', config_name='config')
+@hydra.main(config_path='cfgs', config_name='config')  # retrieve cfgs/config.yaml
 def main(cfg):
-    from train import Workspace as W
-    root_dir = Path.cwd()
-    workspace = W(cfg)
+    from train import Workspace as W  # Workspace class available in this file
+    root_dir = Path.cwd() # returns the current working directory
+    workspace = W(cfg) # instantiate Workspace object
     snapshot = root_dir / 'snapshot.pt'
-    if snapshot.exists():
+    if snapshot.exists(): # get most recent snapshot.pt
         print(f'resuming: {snapshot}')
-        workspace.load_snapshot()
-    workspace.train()
+        workspace.load_snapshot()  # load most recent snapshot.pt
+    workspace.train()  # resume training
 
 
 if __name__ == '__main__':
