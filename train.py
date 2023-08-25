@@ -1,21 +1,16 @@
-# Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
-#
-# This source code is licensed under the MIT license found in the
-# LICENSE file in the root directory of this source tree.
+'''external imports'''
 import warnings
 warnings.filterwarnings('ignore', category=DeprecationWarning)
-
 import os
 os.environ['MKL_SERVICE_FORCE_INTEL'] = '1'
 os.environ['MUJOCO_GL'] = 'egl'
-
 from pathlib import Path # Object-oriented filesystem paths
-
-import hydra 
+import hydra  # dynamically create a hierarchical configuration by composition and override it through config files and the command line
 import numpy as np
 import torch
-from dm_env import specs
+from dm_env import specs # The DeepMind RL Environment API
 
+'''internal imports'''
 import dmc
 import utils
 from logger import Logger
@@ -24,12 +19,10 @@ from video import TrainVideoRecorder, VideoRecorder
 
 torch.backends.cudnn.benchmark = True
 
-
 def make_agent(obs_spec, action_spec, cfg):
     cfg.obs_shape = obs_spec.shape
     cfg.action_shape = action_spec.shape
     return hydra.utils.instantiate(cfg)
-
 
 class Workspace:
     def __init__(self, cfg):
