@@ -179,19 +179,23 @@ class ExtendedTimeStepWrapper(dm_env.Environment):
     def __getattr__(self, name):
         return getattr(self._env, name)
 
-
+'''
+e.g. name: quadruped_walk @cfgs/task/quadruped_walk.yaml
+e.g. frame_stack: 3 {TODO ours should be 1?}
+e.g. action_repeat: 2
+'''
 def make(name, frame_stack, action_repeat, seed):
     domain, task = name.split('_', 1)
     # overwrite cup to ball_in_cup
     domain = dict(cup='ball_in_cup').get(domain, domain)
     # make sure reward is not visualized
-    if (domain, task) in suite.ALL_TASKS:
+    if (domain, task) in suite.ALL_TASKS:  # if domain, task in DeepMind's control library
         env = suite.load(domain,
                          task,
                          task_kwargs={'random': seed},
                          visualize_reward=False)
         pixels_key = 'pixels'
-    else:
+    else:  # TODO ours will automatically go here, need to change to isaacgym env
         name = f'{domain}_{task}_vision'
         env = manipulation.load(name, seed=seed)
         pixels_key = 'front_close'
